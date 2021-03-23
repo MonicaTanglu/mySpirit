@@ -1,11 +1,9 @@
 Component({
   data: {
     selected: 0,
-    "color": "#333",
-    "selectedColor": "#3A96E7",
-    "backgroundColor": "#ffffff",
-    "borderStyle": "black",
-    "list": [{
+    color: "#333",
+    selectedColor: "#ffffff",
+    list: [{
       "pagePath": "/pages/index/index",
       "text": "文化世界"
     }, {
@@ -14,7 +12,7 @@ Component({
     }, {
       "pagePath": "/pages/mine/mine",
       "text": "个人世界"
-    }]
+    }],
   },
   attached() {},
   methods: {
@@ -22,9 +20,9 @@ Component({
       const data = e.currentTarget.dataset
       const url = data.path
       wx.switchTab({url})
-      this.setData({
-        selected: data.index
-      })
+      // this.setData({
+      //   selected: data.index
+      // })
     }
   }
 })
