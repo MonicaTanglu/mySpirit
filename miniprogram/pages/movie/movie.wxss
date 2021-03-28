@@ -1,1 +1,33 @@
 /* pages/movie/movie.wxss */
+/* pages/index/index.wxss */
+.box{
+  margin: 10rpx 16rpx;
+  border: 1px solid #E5E5E5;
+  padding: 30rpx 0px 10px 30rpx;
+  background-color: #fff;
+}
+
+.box .h2 {
+  font-size: 18px;
+  color: black;
+}
+.box .desc {
+  color: #555555;
+  font-size: 13px;
+  padding-top: 10rpx;
+  padding-right: 30rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.box .van-divider {
+  margin: 10px 0;
+}
+.box .footer {
+  color: #888;
+  font-size: 12px;
+  display: flex;
+  padding-right: 30rpx;
+  justify-content: space-between;
+}

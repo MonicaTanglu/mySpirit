@@ -1,12 +1,18 @@
 <!--pages/index/index.wxml-->
 <view class="index">
   <view class="box">
-    <view class="h2">标题2</view>
-    <view class="desc">说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字</view>
-    <van-divider dashed />
-    <view class="footer">
-      <text>秋叶</text>
-      <text>2021-3-19 10:33</text>
+    <view class="avatar">
+      <van-image round width="42px" height="42px" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+    </view>
+    <view>
+      <view class="h2">标题2</view>
+      <view class="desc">说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字</view>
+      <van-divider dashed />
+      <view class="footer">
+        <text>秋叶</text>
+        <text>2021-3-19 10:33</text>
+      </view>
     </view>
   </view>
+
 </view>
