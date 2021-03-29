@@ -19,10 +19,17 @@ Component({
     switchTab(e) {
       const data = e.currentTarget.dataset
       const url = data.path
-      wx.switchTab({url})
+      wx.switchTab({
+        url
+      })
       // this.setData({
       //   selected: data.index
       // })
+    },
+    goTo() {
+      wx.navigateTo({
+        url: '/pages/new/new?selected=' + this.data.selected,
+      })
     }
   }
 })

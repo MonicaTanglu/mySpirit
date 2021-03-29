@@ -1,0 +1,21 @@
+<!--pages/new/new.wxml-->
+<van-cell-group>
+  <van-field value="{{form.title}}" label="标题" input-align="right" placeholder="请输入标题" bind:change="inputChange"
+    data-field="title"></van-field>
+  <van-cell title="类别" value="{{form.category === 1?'小说世界':'电影世界'}}" clickable bindtap="setDialog" data-type="category">
+  </van-cell>
+  <van-cell title="共享" bindtap="setDialog" data-type="share" value="{{form.category === 1?'私有':'共享'}}" clickable>
+  </van-cell>
+</van-cell-group>
+<c-editor></c-editor>
+
+<van-dialog use-slot title="请选择" show="{{show}}" show-cancel-button bind:close="onClose" bind:confirm="onConfirm">
+  <van-radio-group value="{{radio}}" bind:change="radioChange">
+    <van-cell-group>
+      <van-cell wx:for="{{options}}" wx:for-item="item" title="{{item.title}}" clickable bind:click="cellClick"
+        data-name="{{item.name}}">
+        <van-radio slot="right-icon" name="{{item.name}}"></van-radio>
+      </van-cell>
+    </van-cell-group>
+  </van-radio-group>
+</van-dialog>
