@@ -1,9 +1,11 @@
 {
   "pages": [
-    "pages/new/new",
+    
     "pages/index/index",
     "pages/movie/movie",
+    "pages/new/new",
     "pages/mine/mine"
+    
     
   ],
   "window": {

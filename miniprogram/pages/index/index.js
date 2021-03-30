@@ -1,20 +1,80 @@
 // pages/index/index.js
+const app = getApp()
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-
+    db: null,
+    pageNow: 1,
+    pageSize: 20,
+    list: [],
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    if (app.globalData.openid) this.data.openid = app.globalData.openid
+    else {
+      const openid = wx.getStorageSync('openid')
+      this.data.openid = openid
+    }
+    if (!this.data.openid) {
+      wx.cloud.callFunction({
+        name: 'login',
+        success: res => {
+          app.globalData.openid = res.result.openid
+          wx.setStorageSync('openid', res.result.openid)
+          this.data.openid = res.result.openid
+          this.getList()
+        }
+      })
+    } else {
+      app.globalData.openid = this.data.openid
+      this.getList()
+    }
+
+    this.data.db = wx.cloud.database()
+  },
+  async getList() {
+    let originList = []
+    let startIndex = (this.data.pageNow - 1) * this.data.pageSize
+    wx.cloud.callFunction({
+      name: 'get',
+      data: {
+        action: 'getStoryList',
+        startIndex: startIndex,
+        pageSize: this.data.pageSize
+      },
+      success: (res) => {
+        debugger
+        if (res.result.code === 200) {
+          originList.concat(res.result.data)
+          this.setData({
+            list: originList
+          })
+        }
+        console.log(list, 'getList')
+      },
+      fail: err => {
+        debugger
+        console.log(err, 'err')
+      }
+    })
+    // const _ = db.command
+    // let originList = this.data.list
+    // const list = await db.collection('article').where(_.or([{
+    //   category: 1,
+    //   share: 2
+    // }, {
+    //   category: 1,
+    //   share: 1,
+    //   openid: this.data.openid
+    // }])).skip(startIndex).limit(this.data.pageSize).get()
 
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -29,7 +89,7 @@ Page({
     this.setBarSelected()
   },
   setBarSelected() {
-    if(typeof this.getTabBar === 'function' && this.getTabBar()) {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({
         selected: 0
       })
@@ -61,7 +121,12 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    if (this.data.pageSize * this.data.pageNow >= this.data.list.length) {
+      return;
+    } else {
+      this.data.pageNow++
+      this.getList()
+    }
   },
 
   /**

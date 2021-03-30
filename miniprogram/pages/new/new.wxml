@@ -4,10 +4,14 @@
     data-field="title"></van-field>
   <van-cell title="类别" value="{{form.category === 1?'小说世界':'电影世界'}}" clickable bindtap="setDialog" data-type="category">
   </van-cell>
-  <van-cell title="共享" bindtap="setDialog" data-type="share" value="{{form.category === 1?'私有':'共享'}}" clickable>
+  <van-cell title="共享" bindtap="setDialog" data-type="share" value="{{form.share === 1?'私有':'共享'}}" clickable>
   </van-cell>
 </van-cell-group>
-<c-editor></c-editor>
+<c-editor bindeditorChange="editorChange"></c-editor>
+
+<view class="m-t-20 center">
+  <van-button type="info" round bind:click="submit">提交</van-button>
+</view>
 
 <van-dialog use-slot title="请选择" show="{{show}}" show-cancel-button bind:close="onClose" bind:confirm="onConfirm">
   <van-radio-group value="{{radio}}" bind:change="radioChange">

@@ -6,10 +6,14 @@ Page({
    */
   data: {
     form: {
+      id: null,
       title: '',
       category: '',
-      share: 0,
-      detail: ''
+      share: 1,
+      detail: '',
+      introduce: '',
+      chaptorNum: null,
+      chaptorName: null
     },
     radio: 1,
     show: false,
@@ -36,6 +40,9 @@ Page({
    */
   onLoad: function (options) {
     let selected = parseInt(options.selected) + 1
+    if (options.id) {
+      this.data.form.id = options.id
+    }
     this.setData({
       'form.category': selected
     })
@@ -74,6 +81,43 @@ Page({
   inputChange(e) {
     this.setData({
       [`form.${e.currentTarget.dataset.field}`]: e.detail
+    })
+  },
+  editorChange(e) {
+    console.log('editorChange', e)
+    this.data.form.detail = e.detail.delta
+    this.data.form.introduce = String(e.detail.text).substr(0, 24)
+  },
+  submit() {
+    if (!this.data.form.title) {
+      this.showToast('请输入标题')
+      return
+    } else if (!this.data.form.detail) {
+      this.showToast('请输入详细信息')
+      return
+    } else {
+      wx.cloud.callFunction({
+        name: 'createArticle',
+        data: this.data.form,
+        success: res => {
+          this.showToast('创建成功')
+          setTimeout(() => {
+            wx.navigateBack({
+              delta: 0,
+            })
+          }, 500);
+        },
+        fail: err => {
+          this.showToast('创建失败')
+        }
+      })
+    }
+  },
+
+  showToast(info) {
+    wx.showToast({
+      title: info,
+      icon: null
     })
   }
 })
