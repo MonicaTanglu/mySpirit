@@ -101,6 +101,7 @@ Page({
         data: this.data.form,
         success: res => {
           this.showToast('创建成功')
+         wx.setStorageSync('articleUpdate', true)
           setTimeout(() => {
             wx.navigateBack({
               delta: 0,

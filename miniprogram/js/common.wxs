@@ -1,0 +1,30 @@
+var common = {
+  timeFormat: function (str) {
+    if (!str) return ''
+    return str.substring(0, 10);
+  },
+  numTwoDecimal: function (num) {
+    return Number(num).toFixed(2);
+  },
+  formatTime: function (format = 'yyyyMMddhhmmss', timeStr) {
+
+    var date = getDate(timeStr);
+    var formateArr = ['y', 'M', 'd', 'h', 'm', 's'];
+    var returnArr = [];
+    // var time = time.replace(getRegExp('-', 'g'), '/');
+
+    returnArr.push(date.getFullYear());
+    returnArr.push(date.getMonth() + 1);
+    returnArr.push(date.getDate());
+
+    returnArr.push(date.getHours());
+    returnArr.push(date.getMinutes());
+    returnArr.push(date.getSeconds());
+
+    for (i = 0, l = returnArr.length; i < l; i++) {
+      format = format.replace(getRegExp(formateArr[i] + '+'), returnArr[i]);
+    }
+    return format;
+  }
+}
+module.exports = common

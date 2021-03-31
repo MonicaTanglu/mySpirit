@@ -4,7 +4,7 @@ const cloud = require('wx-server-sdk')
 cloud.init()
 const db = cloud.database()
 
-const update = (params) => {
+const update = async (params) => {
   let artcleParams = {
     category: params.category,
     title: params.title,

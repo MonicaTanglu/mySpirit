@@ -22,8 +22,13 @@ Page({
       this.data.openid = openid
     }
     if (!this.data.openid) {
+      let userObj = wx.getStorageSync('userInfo')
       wx.cloud.callFunction({
         name: 'login',
+        data: {
+          avatarUrl: userObj ? userObj.avatarUrl : '',
+          nickName: userObj ? userObj.nickName : ''
+        },
         success: res => {
           app.globalData.openid = res.result.openid
           wx.setStorageSync('openid', res.result.openid)
@@ -35,11 +40,9 @@ Page({
       app.globalData.openid = this.data.openid
       this.getList()
     }
-
-    this.data.db = wx.cloud.database()
   },
   async getList() {
-    let originList = []
+    let originList = this.data.list
     let startIndex = (this.data.pageNow - 1) * this.data.pageSize
     wx.cloud.callFunction({
       name: 'get',
@@ -49,17 +52,15 @@ Page({
         pageSize: this.data.pageSize
       },
       success: (res) => {
-        debugger
         if (res.result.code === 200) {
-          originList.concat(res.result.data)
+          originList = originList.concat(res.result.data)
           this.setData({
             list: originList
           })
+          console.log(this.data.list,originList)
         }
-        console.log(list, 'getList')
       },
       fail: err => {
-        debugger
         console.log(err, 'err')
       }
     })
@@ -87,6 +88,12 @@ Page({
    */
   onShow: function () {
     this.setBarSelected()
+    const path = wx.getStorageSync('articleUpdate')
+    if(path) {
+      this.getList()
+      wx.removeStorageSync('articleUpdate')
+    }
+    // this.getList()
   },
   setBarSelected() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {

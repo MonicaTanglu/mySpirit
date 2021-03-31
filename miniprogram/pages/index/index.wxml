@@ -1,18 +1,20 @@
 <!--pages/index/index.wxml-->
 <view class="index">
-  <view class="box">
-    <view class="avatar">
-      <van-image round width="42px" height="42px" src="https://img.yzcdn.cn/vant/cat.jpeg" />
-    </view>
-    <view>
-      <view class="h2">标题2</view>
-      <view class="desc">说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字</view>
-      <van-divider dashed />
-      <view class="footer">
-        <text>秋叶</text>
-        <text>2021-3-19 10:33</text>
+  <wxs module="common" src="../../js/common.wxs"></wxs>
+  <block wx:for="{{list}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+    <view class="box">
+      <view class="avatar">
+        <van-image round width="42px" height="42px" src="https://img.yzcdn.cn/vant/cat.jpeg" />
+      </view>
+      <view>
+        <view class="h2">{{item.title}}</view>
+        <view class="desc">{{item.introduce}}fff</view>
+        <van-divider dashed />
+        <view class="footer">
+          <text>{{item.nickName}}</text>
+          <text>{{common.formatTime('yyyy-M-d hh:mm',item.createTime)}}</text>
+        </view>
       </view>
     </view>
-  </view>
-
+  </block>
 </view>
