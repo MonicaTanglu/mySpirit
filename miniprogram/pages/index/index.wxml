@@ -6,9 +6,9 @@
       <view class="avatar">
         <van-image round width="42px" height="42px" src="https://img.yzcdn.cn/vant/cat.jpeg" />
       </view>
-      <view>
+      <view class="content">
         <view class="h2">{{item.title}}</view>
-        <view class="desc">{{item.introduce}}fff</view>
+        <view class="desc">{{item.introduce}}</view>
         <van-divider dashed />
         <view class="footer">
           <text>{{item.nickName}}</text>

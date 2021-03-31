@@ -34,3 +34,6 @@
   padding-right: 30rpx;
   justify-content: space-between;
 }
+.box .content {
+  width: 100%;
+}
