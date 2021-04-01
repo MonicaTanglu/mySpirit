@@ -11,35 +11,43 @@ exports.main = async (event, context) => {
   const $ = db.command.aggregate
   switch (event.action) {
     case 'getStoryList':
-      // result = await db.collection('article').where(_.or([{
-      //   category: 1,
-      //   share: 2
-      // }, {
-      //   category: 1,
-      //   share: 1,
-      //   openid: wxContext.OPENID
-      // }])).skip(event.startIndex).limit(event.pageSize).get()
       result = await db.collection('article').aggregate().match(_.or([{
-                category: 1,
-                share: 2
-              }, {
-                category: 1,
-                share: 1,
-                openid: wxContext.OPENID
-              }])
-        ).skip(event.startIndex).limit(event.pageSize).lookup({
-          from: 'user',
-          localField: 'openid',
-          foreignField: 'openid',
-          as: 'userList'
-        }).replaceRoot({
-          newRoot: $.mergeObjects([ $.arrayElemAt(['$userList', 0]), '$$ROOT' ])
-        }).project({
-            userList: 0
-        }).end()
+        category: 1,
+        share: 2
+      }, {
+        category: 1,
+        share: 1,
+        openid: wxContext.OPENID
+      }])).skip(event.startIndex).limit(event.pageSize).lookup({
+        from: 'user',
+        localField: 'openid',
+        foreignField: 'openid',
+        as: 'userList'
+      }).replaceRoot({
+        newRoot: $.mergeObjects([$.arrayElemAt(['$userList', 0]), '$$ROOT'])
+      }).project({
+        userList: 0
+      }).end()
+      break
+    case 'articleDetail':
+      result = await db.collection('article_detail').aggregate().match({
+        articleId: event.id
+      }).lookup({
+        from: 'user',
+        localField: 'openid',
+        foreignField: 'openid',
+        as: 'userList'
+      }).replaceRoot({
+        newRoot: $.mergeObjects([$.arrayElemAt(['$userList', 0]), '$$ROOT'])
+      }).project({
+        userList: 0
+      }).end()
       break
     default:
       break
   }
-  return {data:result.list,code: 200}
+  return {
+    data: result.list,
+    code: 200
+  }
 }

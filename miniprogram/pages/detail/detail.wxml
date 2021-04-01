@@ -1,0 +1,6 @@
+<!--pages/detail/detail.wxml-->
+<text>pages/detail/detail.wxml</text>
+<view>
+  <text>{{detail.title}}</text>
+  <rich-text nodes="{{detail.detail.ops}}"></rich-text>
+</view>

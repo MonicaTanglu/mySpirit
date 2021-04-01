@@ -57,7 +57,6 @@ Page({
           this.setData({
             list: originList
           })
-          console.log(this.data.list,originList)
         }
       },
       fail: err => {
