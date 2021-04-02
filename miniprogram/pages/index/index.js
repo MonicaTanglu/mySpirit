@@ -57,7 +57,6 @@ Page({
           this.setData({
             list: originList
           })
-          console.log(this.data.list,originList)
         }
       },
       fail: err => {
@@ -90,6 +89,7 @@ Page({
     this.setBarSelected()
     const path = wx.getStorageSync('articleUpdate')
     if(path) {
+      this.data.list = []
       this.getList()
       wx.removeStorageSync('articleUpdate')
     }
