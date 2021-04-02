@@ -5,16 +5,42 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    pageNow: 1,
+    pageSize: 20,
+    list: [],
+    loading: true
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-
+    this.getList()
   },
-
+  async getList() {
+    let originList = this.data.list
+    let startIndex = (this.data.pageNow - 1) * this.data.pageSize
+    wx.cloud.callFunction({
+      name: 'get',
+      data: {
+        action: 'movieList',
+        startIndex: startIndex,
+        pageSize: this.data.pageSize
+      },
+      success: (res) => {
+        if (res.result.code === 200) {
+          originList = originList.concat(res.result.data)
+          this.setData({
+            list: originList,
+            loading: false
+          })
+        }
+      },
+      fail: err => {
+        console.log(err, 'err')
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -27,9 +53,16 @@ Page({
    */
   onShow: function () {
     this.setBarSelected()
+    this.setBarSelected()
+    const path = wx.getStorageSync('articleUpdate')
+    if (path) {
+      this.data.list = []
+      this.getList()
+      wx.removeStorageSync('articleUpdate')
+    }
   },
   setBarSelected() {
-    if(typeof this.getTabBar === 'function' && this.getTabBar()) {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
       this.getTabBar().setData({
         selected: 1
       })
@@ -61,7 +94,12 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-
+    if (this.data.pageSize * this.data.pageNow >= this.data.list.length) {
+      return;
+    } else {
+      this.data.pageNow++
+      this.getList()
+    }
   },
 
   /**

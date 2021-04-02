@@ -1,12 +1,23 @@
 <!--pages/index/index.wxml-->
-<view class="movie">
-  <view class="box">
-    <view class="h2">标题2</view>
-    <view class="desc">说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字说明文字</view>
-    <van-divider dashed />
-    <view class="footer">
-      <text>秋叶</text>
-      <text>2021-3-19 10:33</text>
-    </view>
-  </view>
+<view class="center" wx:if="{{loading}}">
+  <van-loading />
+</view>
+<view wx:if="{{!loading && list.length === 0}}">
+  <van-empty description="暂无数据" />
+</view>
+<view class="index" wx:if="{{!loading && list.length > 0}}">
+  <wxs module="common" src="../../js/common.wxs"></wxs>
+  <block wx:for="{{list}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+    <navigator url="/pages/detail/detail?id={{item._id}}">
+      <view class="box">
+        <view class="h2">{{item.title}}</view>
+        <view class="desc">{{item.introduce}}</view>
+        <van-divider dashed />
+        <view class="footer">
+          <text>{{item.nickName}}</text>
+          <text>{{common.formatTime('yyyy-M-d hh:mm',item.createTime)}}</text>
+        </view>
+      </view>
+    </navigator>
+  </block>
 </view>

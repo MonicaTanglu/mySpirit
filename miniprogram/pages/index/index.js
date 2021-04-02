@@ -10,6 +10,7 @@ Page({
     pageNow: 1,
     pageSize: 20,
     list: [],
+    loading : true
   },
 
   /**
@@ -55,7 +56,8 @@ Page({
         if (res.result.code === 200) {
           originList = originList.concat(res.result.data)
           this.setData({
-            list: originList
+            list: originList,
+            loading: false
           })
         }
       },
@@ -63,17 +65,6 @@ Page({
         console.log(err, 'err')
       }
     })
-    // const _ = db.command
-    // let originList = this.data.list
-    // const list = await db.collection('article').where(_.or([{
-    //   category: 1,
-    //   share: 2
-    // }, {
-    //   category: 1,
-    //   share: 1,
-    //   openid: this.data.openid
-    // }])).skip(startIndex).limit(this.data.pageSize).get()
-
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

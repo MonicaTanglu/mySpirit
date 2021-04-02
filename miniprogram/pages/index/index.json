@@ -1,6 +1,8 @@
 {
   "usingComponents": {
     "van-divider": "@vant/weapp/divider/index",
-    "van-image": "@vant/weapp/image/index"
+    "van-image": "@vant/weapp/image/index",
+    "van-loading": "@vant/weapp/loading/index",
+    "van-empty": "@vant/weapp/empty/index"
   }
 }

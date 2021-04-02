@@ -1,5 +1,8 @@
 <!--pages/detail/detail.wxml-->
-<view class="detail">
+<view class="center" wx:if="{{!detail}}">
+  <van-loading />
+</view>
+<view class="detail" wx:if="{{detail}}">
   <wxs module="common" src="../../js/common.wxs"></wxs>
   <view class="h2">{{detail.title}}</view>
   <view class="time"><label>{{common.formatTime('yyyy-M-d hh:mm',detail.updateTime)}}</label></view>

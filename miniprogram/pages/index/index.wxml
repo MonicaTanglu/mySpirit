@@ -1,5 +1,11 @@
 <!--pages/index/index.wxml-->
-<view class="index">
+<view class="center" wx:if="{{loading}}">
+  <van-loading />
+</view>
+<view wx:if="{{!loading && list.length === 0}}">
+  <van-empty description="暂无数据" />
+</view>
+<view class="index" wx:if="{{!loading && list.length > 0}}">
   <wxs module="common" src="../../js/common.wxs"></wxs>
   <block wx:for="{{list}}" wx:key="index" wx:for-index="index" wx:for-item="item">
     <navigator url="/pages/detail/detail?id={{item._id}}">

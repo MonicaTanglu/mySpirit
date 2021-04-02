@@ -7,7 +7,7 @@ Page({
    */
   data: {
     id: null,
-    detail: {},
+    detail: null,
     popShow: false,
     currentOpenid: '',
     commentContent: '',
@@ -40,7 +40,6 @@ Page({
     this.setData({
       detail
     })
-    console.log('getDetail', result, this.data.detail.detail.ops)
   },
   popHandle() {
     this.setData({
@@ -89,6 +88,9 @@ Page({
         if(res) {
           wx.showToast({
             title: '评论成功'
+          })
+          this.setData({
+            commentContent: ''
           })
           this.getCommentList()
         }

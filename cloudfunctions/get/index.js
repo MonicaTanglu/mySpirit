@@ -3,6 +3,9 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 const db = cloud.database()
+const _ = db.command
+const $ = db.command.aggregate
+const wxContext = cloud.getWXContext()
 // 获取评论列表
 const getComment = async (event) => {
   const $ = db.command.aggregate
@@ -20,9 +23,29 @@ const getComment = async (event) => {
   }).end()
   return res
 }
+const getMovieList = async (event) => {
+  let res = await db.collection('article').aggregate().match(_.or([{
+    category: 2,
+    share: 2
+  }, {
+    category: 2,
+    share: 1,
+    openid: wxContext.OPENID
+  }])).skip(event.startIndex).limit(event.pageSize).lookup({
+    from: 'user',
+    localField: 'openid',
+    foreignField: 'openid',
+    as: 'userList'
+  }).replaceRoot({
+    newRoot: $.mergeObjects([$.arrayElemAt(['$userList', 0]), '$$ROOT'])
+  }).project({
+    userList: 0
+  }).end()
+  return res
+}
 // 云函数入口函数
 exports.main = async (event, context) => {
-  const wxContext = cloud.getWXContext()
+  
   let result = []
   const _ = db.command
   const $ = db.command.aggregate
@@ -59,6 +82,9 @@ exports.main = async (event, context) => {
       }).project({
         userList: 0
       }).end()
+      break
+    case 'movieList':
+      result = await getMovieList(event)
       break
     case 'comment':
       result = await getComment(event)
