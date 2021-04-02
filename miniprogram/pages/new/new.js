@@ -85,7 +85,7 @@ Page({
   },
   editorChange(e) {
     console.log('editorChange', e)
-    this.data.form.detail = e.detail.delta
+    this.data.form.detail = e.detail.html
     this.data.form.introduce = String(e.detail.text).substr(0, 24)
   },
   submit() {

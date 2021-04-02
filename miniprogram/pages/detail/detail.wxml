@@ -1,6 +1,45 @@
 <!--pages/detail/detail.wxml-->
-<text>pages/detail/detail.wxml</text>
-<view>
-  <text>{{detail.title}}</text>
-  <rich-text nodes="{{detail.detail.ops}}"></rich-text>
+<view class="detail">
+  <wxs module="common" src="../../js/common.wxs"></wxs>
+  <view class="h2">{{detail.title}}</view>
+  <view class="time"><label>{{common.formatTime('yyyy-M-d hh:mm',detail.createTime)}}</label></view>
+  <view class="flex-name">
+    <view>
+      <van-image round width="42px" height="42px" src="{{detail.avatarUrl}}"></van-image>
+    </view>
+    <label class="icon" bindtap="popHandle">
+      <van-icon name="ellipsis" />
+    </label>
+  </view>
+  <rich-text nodes="{{detail.detail}}"></rich-text>
+  <van-divider />
+  <view class="comment">
+    <van-search left-icon="null" value="{{ commentContent }}" bind:change="onChange" placeholder="写下我的评论"
+      use-action-slot>
+      <view slot="action" bind:tap="submitComment">确定</view>
+    </van-search>
+    <block>
+      <view class="comment-item m-t-10">
+        <view class="comment-content">
+          假如有一天，我也我也假如有一天，我也我也我也我也我也我也
+          <label class="delete">删除</label>
+        </view>
+        <view class="comment-user">
+          <van-image class="avatar" round width="36px" height="36px" src="https://img.yzcdn.cn/vant/cat.jpeg">
+          </van-image>
+          <label class="name">张三</label>
+        </view>
+      </view>
+    </block>
+  </view>
+
+  <view>
+
+  </view>
+  <!-- <rich-text nodes="{{detail.detail}}"></rich-text> -->
 </view>
+
+<van-popup show="{{ popShow }}" bind:close="onClose" position="bottom" custom-style="height: 70px">
+  <view class="cell-block" bindtap="edit">编辑</view>
+  <view class="cell-block" bindtap="delete">删除</view>
+</van-popup>

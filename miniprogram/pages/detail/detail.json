@@ -1,3 +1,12 @@
 {
-  "usingComponents": {}
+  "navigationBarTitleText": "详情",
+  "navigationBarBackgroundColor": "#3A96E7",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "van-divider": "@vant/weapp/divider/index",
+    "van-image": "@vant/weapp/image/index",
+    "van-icon": "@vant/weapp/icon/index",
+    "van-popup": "@vant/weapp/popup/index",
+    "van-search": "@vant/weapp/search/index"
+  }
 }

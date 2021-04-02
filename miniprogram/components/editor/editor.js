@@ -108,8 +108,9 @@ Component({
       // console.log(res, 'editorChange')
       // this.properties.detail = res.detail.delta
       this.triggerEvent('editorChange', {
-        delta: res.detail.delta,
-        text: res.detail.text
+        html: res.detail.html,
+        text: res.detail.text,
+        delta: res.detail.delta
       })
     }
   }
