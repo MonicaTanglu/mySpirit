@@ -8,7 +8,6 @@ Component({
       type: String,
       value: null,
       observer: function (newVal, oldVal) {
-        debugger
         if(this.editorCtx) this.editorCtx.setContents({html: newVal})
         else this.content = newVal
       }

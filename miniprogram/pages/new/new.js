@@ -117,22 +117,27 @@ Page({
       this.showToast('请输入详细信息')
       return
     } else {
-      wx.cloud.callFunction({
-        name: 'createArticle',
-        data: this.data.form,
-        success: res => {
-          this.showToast('创建成功')
-          wx.setStorageSync('articleUpdate', true)
-          setTimeout(() => {
-            wx.navigateBack({
-              delta: 0,
-            })
-          }, 500);
-        },
-        fail: err => {
-          this.showToast('创建失败')
-        }
-      })
+      if(this.data.form.id) {
+        // 编辑
+      } else {
+        // 新增
+        wx.cloud.callFunction({
+          name: 'createArticle',
+          data: this.data.form,
+          success: res => {
+            this.showToast('创建成功')
+            wx.setStorageSync('articleUpdate', true)
+            setTimeout(() => {
+              wx.navigateBack({
+                delta: 0,
+              })
+            }, 500);
+          },
+          fail: err => {
+            this.showToast('创建失败')
+          }
+        })
+      }
     }
   },
 
