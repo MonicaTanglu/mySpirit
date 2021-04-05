@@ -42,12 +42,33 @@ Page({
     let selected = parseInt(options.selected) + 1
     if (options.id) {
       this.data.form.id = options.id
+      this.getDetail(options.id)
     }
     this.setData({
       'form.category': selected
     })
   },
-
+  async getDetail(id) {
+    wx.cloud.callFunction({
+      name: 'get',
+      data: {
+        id: id,
+        action: 'articleDetail'
+      },
+      success: (res) => {
+        let detail = res.result.data[0]
+        this.setData({
+          'form.title': detail.title,
+          'form.category': detail.category,
+          'form.share': detail.share,
+          'form.detail': detail.detail,
+          'form.introduce': detail.introduce
+        })
+        
+        console.log(detail, this.data.form)
+      }
+    })
+  },
   onclose() {
     this.setData({
       show: false
@@ -101,7 +122,7 @@ Page({
         data: this.data.form,
         success: res => {
           this.showToast('创建成功')
-         wx.setStorageSync('articleUpdate', true)
+          wx.setStorageSync('articleUpdate', true)
           setTimeout(() => {
             wx.navigateBack({
               delta: 0,

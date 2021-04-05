@@ -59,7 +59,7 @@ Page({
         id: this.data.id
       },
       success: (res) => {
-        let commentList = res.result.data 
+        let commentList = res.result.data
         this.setData({
           commentList: commentList
         })
@@ -68,7 +68,7 @@ Page({
   },
   async submitComment() {
     let userInfo = await this.getUserInfo()
-    if(!this.data.commentContent) {
+    if (!this.data.commentContent) {
       wx.showToast({
         title: '请填写评论',
         icon: 'null'
@@ -85,7 +85,7 @@ Page({
         articleId: this.data.id
       },
       success: (res) => {
-        if(res) {
+        if (res) {
           wx.showToast({
             title: '评论成功'
           })
@@ -125,6 +125,22 @@ Page({
     this.setData({
       commentContent: e.detail
     })
+  },
+  edit() {
+    wx.navigateTo({
+      url: '/pages/new/new?id=' + this.data.id,
+    })
+  },
+  delete() {
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除吗？',
+      success(res) {
+        if(res.confirm) {
+
+        }
+      }
+    })()
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

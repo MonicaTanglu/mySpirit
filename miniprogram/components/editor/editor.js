@@ -5,8 +5,13 @@ Component({
    */
   properties: {
     detail: {
-      type: Object,
-      value: null
+      type: String,
+      value: null,
+      observer: function (newVal, oldVal) {
+        debugger
+        if(this.editorCtx) this.editorCtx.setContents({html: newVal})
+        else this.content = newVal
+      }
     }
   },
 
@@ -98,9 +103,10 @@ Component({
     onEditorReady() {
       const that = this
       this.createSelectorQuery().select('#editor').context(function (res) {
+        console.log(that.properties.detail, 'properties')
         that.editorCtx = res.context
         if (that.properties.detail) that.editorCtx.setContents({
-          delta: that.properties.detail
+          html: that.properties.detail
         })
       }).exec()
     },

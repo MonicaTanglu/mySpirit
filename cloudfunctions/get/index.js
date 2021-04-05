@@ -81,6 +81,15 @@ exports.main = async (event, context) => {
         newRoot: $.mergeObjects([$.arrayElemAt(['$userList', 0]), '$$ROOT'])
       }).project({
         userList: 0
+      }).lookup({
+        from: 'article',
+        localField: 'articleId',
+        foreignField: '_id',
+        as: 'articleList'
+      }).replaceRoot({
+        newRoot: $.mergeObjects([$.arrayElemAt(['$articleList', 0]), '$$ROOT'])
+      }).project({
+        articleList: 0
       }).end()
       break
     case 'movieList':
