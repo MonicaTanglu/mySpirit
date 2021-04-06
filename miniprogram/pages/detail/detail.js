@@ -18,7 +18,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.data.id = options.id ? options.id : '17453ede6066719e0051f093789f2af7'
+    this.data.id = options.id
     const openid = wx.getStorageSync('openid')
     this.setData({
       openid: openid
@@ -131,16 +131,59 @@ Page({
       url: '/pages/new/new?id=' + this.data.id,
     })
   },
+  deleteComment(e) {
+    let that = this
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除吗？',
+      success(res) {
+        if (res.confirm) {
+          wx.cloud.callFunction({
+            name: 'delete',
+            data: {
+              id: e.currentTarget.dataset.id,
+              action: 'deleteComment'
+            },
+            success: (res) => {
+              console.log('deleteComment', res)
+              if (res.result.data) {
+                that.showToast('删除成功')
+                that.getCommentList()
+              }
+            }
+          })
+        }
+      }
+    })
+
+  },
   delete() {
     wx.showModal({
       title: '提示',
       content: '确定要删除吗？',
       success(res) {
-        if(res.confirm) {
-
+        if (res.confirm) {
+          wx.cloud.callFunction({
+            name: 'delete',
+            data: {
+              action: 'deleteArticle',
+              id: this.data.id
+            },
+            success: (res) => {
+              if (res.data) {
+                this.showToast('删除成功', 'success')
+              }
+            }
+          })
         }
       }
     })()
+  },
+  showToast(content, icon = "success") {
+    wx.showToast({
+      title: content,
+      icon: icon
+    })
   },
   /**
    * 生命周期函数--监听页面初次渲染完成
@@ -153,7 +196,10 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    this.setData({
+      popShow: false
+    })
+    if (this.data.id) this.getDetail()
   },
 
   /**

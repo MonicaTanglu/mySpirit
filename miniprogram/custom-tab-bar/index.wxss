@@ -26,6 +26,7 @@
   /* width: 33.3%; */
   text-align: center;
   align-items: center;
+  border-right: 1px solid #E4E4E4;
   flex: 1;
   display: flex;
   justify-content: center;

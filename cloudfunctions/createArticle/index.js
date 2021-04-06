@@ -4,16 +4,16 @@ const cloud = require('wx-server-sdk')
 cloud.init()
 const db = cloud.database()
 
-const update = async (params) => {
+const updateArticle = async (params) => {
   let artcleParams = {
     category: params.category,
     title: params.title,
     introduce: params.introduce,
-    share: eparamsvent.share
+    share: params.share
   }
   // 第一步修改文章
   const res = await db.collection('article').where({
-    id: params._id
+    id: params.id
   }).update({
     data: artcleParams
   });
@@ -21,7 +21,7 @@ const update = async (params) => {
   // 第二部判断是否是个人文化 通过是否有传章节名
   if (params.chaptorNum) {
     chaptorRes = await db.collection('chaptor').where({
-      articleId: params._id
+      articleId: params.id
     }).update({
       data: {
         chaptorNum: params.chaptorNum,
@@ -37,11 +37,11 @@ const update = async (params) => {
     chaptorId: chaptorRes ? chaptorRes._id : null
   }
   let detailRes = await db.collection('article_detail').where({
-    articleId: params._id
+    articleId: params.id
   }).update({
     data: articleDetailParams
   })
-  if (detailRes.updated > 0) return true
+  if (detailRes.stats.updated > 0) return true
   return false
 }
 // 云函数入口函数
@@ -50,7 +50,7 @@ exports.main = async (event, context) => {
   let success = false
   const wxContext = cloud.getWXContext()
   if (params.id) { // 假如存在id则修改
-    success = update(params)
+    success = await updateArticle(params)
   } else {
     let artcleParams = {
       category: event.category,

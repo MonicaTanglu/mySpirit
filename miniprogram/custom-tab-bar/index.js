@@ -28,9 +28,10 @@ Component({
       // })
     },
     goTo() {
-      const userInfo = wx.getStorageSync('userInfo')
+      const userInfo = app.globalData.userInfo ? app.globalData.userInfo : wx.getStorageSync('userInfo')
       if (!userInfo) {
-        wx.getUserInfo({
+        wx.getUserProfile({
+          desc: '存储文章作者昵称，头像信息',
           success: (res) => {
             wx.setStorageSync('userInfo', res.userInfo)
             app.globalData.userInfo = res.userInfo
@@ -51,7 +52,7 @@ Component({
           url: '/pages/new/new?selected=' + this.data.selected,
         })
       }
-      
+
     }
   }
 })

@@ -20,13 +20,22 @@ const deleteArticleDetail = async (event) => {
   if(articleDeleteRes) return true
   else return false
 }
+const deleteComment = async (event) => {
+  let res = await db.collection('comment').where({
+    _id: event.id
+  }).remove()
+  if(res) return true 
+  return false
+}
 // 云函数入口函数
 exports.main = async (event, context) => {
   let result = false
   switch(event.action) {
     case 'deleteArticle':
-      result = deleteArticleDetail(event)
+      result = await deleteArticleDetail(event)
       break
+    case 'deleteComment':
+      result = await deleteComment(event)
     default:
       break
   }

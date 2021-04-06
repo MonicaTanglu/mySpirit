@@ -27,7 +27,7 @@
           <view>{{item.content}}</view>
           <view class="flex">
             <label class="time">{{common.formatTime('yyyy-M-d',item.commentTime)}}</label>
-            <label class="delete" wx:if="{{openid === item.openid}}" >删除</label>
+            <label class="delete" wx:if="{{openid === item.openid}}" data-id="{{item._id}}" bindtap="deleteComment" >删除</label>
           </view>
           
         </view>

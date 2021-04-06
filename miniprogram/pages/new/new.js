@@ -119,6 +119,22 @@ Page({
     } else {
       if(this.data.form.id) {
         // 编辑
+        wx.cloud.callFunction({
+          name: 'createArticle',
+          data: this.data.form,
+          success: res => {
+            this.showToast('修改成功')
+            wx.setStorageSync('articleUpdate', true)
+            setTimeout(() => {
+              wx.navigateBack({
+                delta: 0,
+              })
+            }, 500);
+          },
+          fail: err => {
+            this.showToast('修改失败')
+          }
+        })
       } else {
         // 新增
         wx.cloud.callFunction({
