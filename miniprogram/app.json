@@ -8,8 +8,6 @@
     "pages/myStory/myStory",
     "pages/aboutme/aboutme",
     "pages/setting/setting"
-    
-    
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
