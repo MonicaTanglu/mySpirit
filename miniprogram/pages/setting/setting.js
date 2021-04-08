@@ -1,4 +1,5 @@
 // pages/setting/setting.js
+const app = getApp()
 Page({
 
   /**
@@ -62,5 +63,12 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  logout: function() {
+    wx.removeStorageSync('userInfo')
+    app.globalData.userInfo = null
+    wx.navigateBack({
+      delta: 0,
+    })
   }
 })

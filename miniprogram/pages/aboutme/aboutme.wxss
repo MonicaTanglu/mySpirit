@@ -1,1 +1,10 @@
 /* pages/aboutme/aboutme.wxss */
+.text-content {
+  text-indent: 30px;
+  font-size: 15px ;
+  color: #333;
+  line-height: 1.5;
+  margin-top: 20px;
+  background: #fff;
+  padding: 20px;
+}

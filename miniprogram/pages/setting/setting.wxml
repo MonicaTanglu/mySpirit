@@ -1,2 +1,6 @@
 <!--pages/setting/setting.wxml-->
-<text>pages/setting/setting.wxml</text>
+<!-- <text>pages/setting/setting.wxml</text> -->
+<view style="padding:20px;">
+  <button bindtap="logout" type="primary" plain="{{true}}">退出登录</button>
+</view>
+

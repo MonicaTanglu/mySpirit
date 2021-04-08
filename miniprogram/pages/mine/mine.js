@@ -57,6 +57,14 @@ Page({
    */
   onShow: function () {
     this.setBarSelected()
+    if (!app.globalData.userInfo) {
+      this.setData({
+        userInfo: {
+          avatarUrl: '/images/default-avatar.png',
+          nickName: ''
+        }
+      })
+    }
   },
   setBarSelected() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {

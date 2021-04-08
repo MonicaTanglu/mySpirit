@@ -14,9 +14,9 @@
   </view>
   <view class="m-t-10">
     <van-cell-group>
-      <van-cell title="我的故事" isLink />
-      <van-cell title="关于我" isLink />
-      <van-cell title="设置" isLink />
+      <van-cell title="我的故事" isLink url="/pages/myStory/myStory" />
+      <van-cell title="关于我" isLink url="/pages/aboutme/aboutme" />
+      <van-cell title="设置" isLink url="/pages/setting/setting" />
     </van-cell-group>
   </view>
 </view>

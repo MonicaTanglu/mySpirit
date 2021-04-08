@@ -43,6 +43,25 @@ const getMovieList = async (event) => {
   }).end()
   return res
 }
+
+const getStoryList = async (event) => {
+  let res = await db.collection('article').aggregate().match({
+    category: 3,
+    share: 1,
+    openid: wxContext.OPENID
+  }).skip(event.startIndex).limit(event.pageSize).lookup({
+    from: 'user',
+    localField: 'openid',
+    foreignField: 'openid',
+    as: 'userList'
+  }).replaceRoot({
+    newRoot: $.mergeObjects([$.arrayElemAt(['$userList', 0]), '$$ROOT'])
+  }).project({
+    userList: 0
+  }).end()
+  return res
+}
+
 // 云函数入口函数
 exports.main = async (event, context) => {
   
@@ -94,6 +113,9 @@ exports.main = async (event, context) => {
       break
     case 'movieList':
       result = await getMovieList(event)
+      break
+    case 'storyList':
+      result = await getStoryList(event)
       break
     case 'comment':
       result = await getComment(event)

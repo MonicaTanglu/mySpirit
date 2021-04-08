@@ -1,2 +1,7 @@
 <!--pages/aboutme/aboutme.wxml-->
-<text>pages/aboutme/aboutme.wxml</text>
+<view class="text-content">
+  本职前端工程师，业余产品经理。接下来我会将这个原型在小程序中实现，可能会有一点变化，后续也会更新上来。更多了解，扫一扫下面二维码。
+  <view class="center m-t-20">
+    <image style="width:160px;height:160px;" src="/images/wechat.jpg"></image>
+  </view>
+</view>

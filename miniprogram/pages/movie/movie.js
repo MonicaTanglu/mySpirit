@@ -53,7 +53,6 @@ Page({
    */
   onShow: function () {
     this.setBarSelected()
-    this.setBarSelected()
     const path = wx.getStorageSync('articleUpdate')
     if (path) {
       this.data.list = []
