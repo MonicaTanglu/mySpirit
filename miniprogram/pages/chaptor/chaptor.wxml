@@ -1,0 +1,22 @@
+<!--pages/chaptor/chaptor.wxml-->
+<view class="m-t-20 chaptor-list">
+  <view class="h2">
+    标题1
+  </view>
+  <view class="center" wx:if="{{loading}}">
+    <van-loading />
+  </view>
+  <view wx:if="{{!loading && list.length === 0}}">
+    <van-empty description="暂无数据" />
+  </view>
+  <view class="m-t-20" wx:if="{{!loading && list.length > 0}}">
+    <van-cell-group>
+      <block wx:for="{{list}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+        <van-cell title="第{{item.chaptorNum}}章" isLink url="/pages/storyDetail/storyDetail?id={{item._id}}" />
+      </block>
+    </van-cell-group>
+  </view>
+  <cover-view class="plus-circle" bindtap="goTo">
+    <van-icon name="plus" color="#ffffff" size="30px" />
+  </cover-view>
+</view>

@@ -1,13 +1,11 @@
-// pages/myStory/myStory.js
-
+// pages/chaptor/chaptor.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    pageNow: 1,
-    pageSize: 20,
+    title: '',
     list: [],
     loading: true
   },
@@ -16,32 +14,30 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.getList()
-  },
-  async getList() {
-    let originList = this.data.list
-    let startIndex = (this.data.pageNow - 1) * this.data.pageSize
+    let id = options.id
+    let title = options.title
+    this.setData({
+      title
+    })
     wx.cloud.callFunction({
       name: 'get',
       data: {
-        action: 'storyList',
-        startIndex: startIndex,
-        pageSize: this.data.pageSize
+        action: 'chaptor',
+        articleId: id
       },
       success: (res) => {
-        if (res.result.code === 200) {
-          originList = originList.concat(res.result.data)
-          this.setData({
-            list: originList,
-            loading: false
-          })
-        }
+        console.log(res,'chaptorList')
+        this.setData({
+          loading: false,
+          list: res.result.data
+        })
       },
-      fail: err => {
-        console.log(err, 'err')
+      fail: () => {
+        
       }
     })
   },
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -53,12 +49,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    const path = wx.getStorageSync('articleUpdate')
-    if (path) {
-      this.data.list = []
-      this.getList()
-      wx.removeStorageSync('articleUpdate')
-    }
+
   },
 
   /**
@@ -94,10 +85,5 @@ Page({
    */
   onShareAppMessage: function () {
 
-  },
-  goTo() {
-    wx.navigateTo({
-      url: '/pages/newStory/newStory',
-    })
   }
 })

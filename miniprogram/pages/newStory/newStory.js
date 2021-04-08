@@ -1,4 +1,4 @@
-// pages/new/new.js
+// pages/newStory/newStory.js
 import util from '../../js/util.js'
 Page({
 
@@ -9,45 +9,23 @@ Page({
     form: {
       id: null,
       title: '',
-      category: '',
+      category: 3,
       share: 1,
       detail: '',
       introduce: '',
-      chaptorNum: null,
-      chaptorName: null
+      chaptorNum: 1
     },
-    radio: 1,
-    show: false,
-    options: [],
     currentField: '',
-    categoryOptions: [{
-      title: '小说世界',
-      name: 1
-    }, {
-      title: '电影世界',
-      name: 2
-    }],
-    shareOption: [{
-      title: '私有',
-      name: 1,
-    }, {
-      title: '公开',
-      name: 2,
-    }]
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let selected = parseInt(options.selected) + 1
     if (options.id) {
       this.data.form.id = options.id
       this.getDetail(options.id)
     }
-    this.setData({
-      'form.category': selected
-    })
   },
   async getDetail(id) {
     wx.cloud.callFunction({
@@ -60,39 +38,12 @@ Page({
         let detail = res.result.data[0]
         this.setData({
           'form.title': detail.title,
-          'form.category': detail.category,
-          'form.share': detail.share,
           'form.detail': detail.detail,
+          'form.chaptorNum': detail.chaptorNum,
           'form.introduce': detail.introduce
         })
-        
         console.log(detail, this.data.form)
       }
-    })
-  },
-  onclose() {
-    this.setData({
-      show: false
-    })
-  },
-  setDialog(e) {
-    let type = e.currentTarget.dataset.type
-    let options = this.data.options
-    this.data.currentField = type
-    if (type === 'category') {
-      options = this.data.categoryOptions
-    } else {
-      options = this.data.shareOption
-    }
-    this.setData({
-      options,
-      show: true
-    })
-  },
-  radioChange(e) {
-    this.setData({
-      [`form.${this.data.currentField}`]: e.detail,
-      radio: e.detail
     })
   },
   cellClick(e) {
@@ -104,6 +55,16 @@ Page({
     this.setData({
       [`form.${e.currentTarget.dataset.field}`]: e.detail
     })
+  },
+  inputNumChange(e) {
+    if (/\d+/.test(e.detail)) {
+      this.setData({
+        [`form.${e.currentTarget.dataset.field}`]: e.detail
+      })
+    } else {
+      this.showToast('章节号格式不正确！')
+      return false
+    }
   },
   editorChange(e) {
     console.log('editorChange', e)
@@ -117,8 +78,11 @@ Page({
     } else if (!this.data.form.detail) {
       this.showToast('请输入详细信息')
       return
-    } else {
-      if(this.data.form.id) {
+    } else if(!this.data.form.chaptorNum) {
+      this.showToast('请输入章节号')
+      return 
+    }else {
+      if (this.data.form.id) {
         // 编辑
         wx.cloud.callFunction({
           name: 'createArticle',

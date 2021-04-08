@@ -1,2 +1,16 @@
-<!--pages/myStory/myStory.wxml-->
-<text>pages/myStory/myStory.wxml</text>
+<view class="center" wx:if="{{loading}}">
+  <van-loading />
+</view>
+<view wx:if="{{!loading && list.length === 0}}">
+  <van-empty description="暂无数据" />
+</view>
+<view class="m-t-20" wx:if="{{!loading && list.length > 0}}">
+  <van-cell-group>
+    <block wx:for="{{list}}" wx:key="index" wx:for-index="index" wx:for-item="item">
+      <van-cell title="{{item.title}}" isLink url="/pages/chaptor/chaptor?id={{item._id}}&&title={{item.title}}" />
+    </block>
+  </van-cell-group>
+</view>
+<cover-view class="plus-circle" bindtap="goTo">
+  <van-icon name="plus" color="#ffffff" size="30px" />
+</cover-view>

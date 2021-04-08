@@ -23,6 +23,7 @@ const getComment = async (event) => {
   }).end()
   return res
 }
+// 电影文化列表
 const getMovieList = async (event) => {
   let res = await db.collection('article').aggregate().match(_.or([{
     category: 2,
@@ -43,7 +44,7 @@ const getMovieList = async (event) => {
   }).end()
   return res
 }
-
+// 个人故事列表
 const getStoryList = async (event) => {
   let res = await db.collection('article').aggregate().match({
     category: 3,
@@ -61,10 +62,53 @@ const getStoryList = async (event) => {
   }).end()
   return res
 }
+// 获取章节列表
+
+const getChaptorList = async (event) => {
+  let res = await db.collection('chaptor').orderBy('chaptorNum', 'desc').where({
+    articleId: event.articleId
+  }).get()
+  return res
+}
+// 获取故事详情
+const storyDetail = async (event) => {
+  let res = await db.collection('article_detail').aggregate().match({
+    chaptorId: event.id,
+    openid: wxContext.OPENID
+  }).lookup({
+    from: 'user',
+    localField: 'openid',
+    foreignField: 'openid',
+    as: 'userList'
+  }).replaceRoot({
+    newRoot: $.mergeObjects([$.arrayElemAt(['$userList', 0]), '$$ROOT'])
+  }).project({
+    userList: 0
+  }).lookup({
+    from: 'article',
+    localField: 'articleId',
+    foreignField: '_id',
+    as: 'articleList'
+  }).replaceRoot({
+    newRoot: $.mergeObjects([$.arrayElemAt(['$articleList', 0]), '$$ROOT'])
+  }).project({
+    articleList: 0
+  }).lookup({
+    from: 'chaptor',
+    localField: 'chaptorId',
+    foreignField: '_id',
+    as: 'chaptorList'
+  }).replaceRoot({
+    newRoot: $.mergeObjects([$.arrayElemAt(['$chaptorList', 0]), '$$ROOT'])
+  }).project({
+    chaptorList: 0
+  }).end()
+  return res
+}
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-  
+
   let result = []
   const _ = db.command
   const $ = db.command.aggregate
@@ -119,6 +163,13 @@ exports.main = async (event, context) => {
       break
     case 'comment':
       result = await getComment(event)
+      break
+    case 'chaptor':
+      let chaptorRes = await getChaptorList(event)
+      result['list'] = chaptorRes.data
+      break
+    case 'storyDetail':
+      result = await storyDetail(event)
       break
     default:
       break

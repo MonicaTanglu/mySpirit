@@ -18,14 +18,13 @@ const updateArticle = async (params) => {
     data: artcleParams
   });
   let chaptorRes = null;
-  // 第二部判断是否是个人文化 通过是否有传章节名
-  if (params.chaptorNum) {
+  // 第二部判断是否是个人文化 通过category是否是3
+  if (params.category === 3) {
     chaptorRes = await db.collection('chaptor').where({
       articleId: params.id
     }).update({
       data: {
-        chaptorNum: params.chaptorNum,
-        chaptorName: params.chaptorName
+        chaptorNum: params.chaptorNum
       }
     })
   }
@@ -66,12 +65,11 @@ exports.main = async (event, context) => {
     });
     let chaptorRes = null;
     // 第二部判断是否是个人文化 通过是否有传章节名
-    if (event.chaptorNum) {
+    if (event.category === 3) {
       chaptorRes = await db.collection('chaptor').add({
         data: {
           articleId: res._id,
-          chaptorNum: event.chaptorNum,
-          chaptorName: event.chaptorName
+          chaptorNum: event.chaptorNum
         }
       })
     }
