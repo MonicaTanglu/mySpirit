@@ -3,7 +3,7 @@ const cloud = require('wx-server-sdk')
 
 cloud.init()
 const db = cloud.database()
-
+const wxContext = cloud.getWXContext()
 const updateArticle = async (params) => {
   let artcleParams = {
     category: params.category,
@@ -13,41 +13,70 @@ const updateArticle = async (params) => {
   }
   // 第一步修改文章
   const res = await db.collection('article').where({
-    id: params.id
+    _id: params.id
   }).update({
     data: artcleParams
   });
   let chaptorRes = null;
   // 第二部判断是否是个人文化 通过category是否是3
+  let detailRes = null
   if (params.category === 3) {
-    chaptorRes = await db.collection('chaptor').where({
-      articleId: params.id
-    }).update({
-      data: {
-        chaptorNum: params.chaptorNum
+    // 假如chaptorId不为空则修改
+    if (params.chaptorId) {
+      chaptorRes = await db.collection('chaptor').where({
+        _id: params.chaptorId
+      }).update({
+        data: {
+          chaptorNum: params.chaptorNum
+        }
+      })
+      // 第三步修改文章
+      let articleDetailParams = {
+        title: params.title,
+        updateTime: new Date(),
+        detail: params.detail,
+        openid: wxContext.OPENID,
+        chaptorId: params.chaptorId ? params.chaptorId : null
       }
-    })
+      detailRes = await db.collection('article_detail').where({
+        articleId: params.id
+      }).update({
+        data: articleDetailParams
+      })
+    } else {
+      // 为空则新增
+      chaptorRes = await db.collection('chaptor').add({
+        data: {
+          articleId: params.id,
+          chaptorNum: params.chaptorNum
+        }
+      })
+      // 第三步添加文章
+      let articleDetailParams = {
+        title: params.title,
+        updateTime: new Date(),
+        detail: params.detail,
+        chaptorId: chaptorRes ? chaptorRes._id : null,
+        articleId: params.id,
+        openid: wxContext.OPENID
+      }
+      detailRes = await db.collection('article_detail').add({
+        data: articleDetailParams
+      })
+
+    }
+
+
   }
-  // 第三步修改文章
-  let articleDetailParams = {
-    title: params.title,
-    updateTime: new Date(),
-    detail: params.detail,
-    chaptorId: chaptorRes ? chaptorRes._id : null
-  }
-  let detailRes = await db.collection('article_detail').where({
-    articleId: params.id
-  }).update({
-    data: articleDetailParams
-  })
-  if (detailRes.stats.updated > 0) return true
+
+  if (detailRes.stats.updated > 0 || detailRes._id) return true
   return false
 }
 // 云函数入口函数
 exports.main = async (event, context) => {
   let params = event
   let success = false
-  const wxContext = cloud.getWXContext()
+
   if (params.id) { // 假如存在id则修改
     success = await updateArticle(params)
   } else {

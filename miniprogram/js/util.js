@@ -1,16 +1,22 @@
 // 格式化时间
-const formatTime = (date, splitString = '/') => {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const hour = date.getHours();
-  const minute = date.getMinutes();
-  const second = date.getSeconds();
+const formatTime = (format = 'yyyyMMddhhmmss', timeStr) => {
+  var date = getDate(timeStr);
+  var formateArr = ['y', 'M', 'd', 'h', 'm', 's'];
+  var returnArr = [];
+  // var time = time.replace(getRegExp('-', 'g'), '/');
 
-  return (
-    [year, month, day].map(formatDay).join(splitString) +
-    ' ' + [hour, minute, second].map(formatDay).join(':')
-  );
+  returnArr.push(date.getFullYear());
+  returnArr.push(date.getMonth() + 1);
+  returnArr.push(date.getDate());
+
+  returnArr.push(date.getHours());
+  returnArr.push(date.getMinutes());
+  returnArr.push(date.getSeconds());
+
+  for (i = 0, l = returnArr.length; i < l; i++) {
+    format = format.replace(getRegExp(formateArr[i] + '+'), returnArr[i]);
+  }
+  return format;
 };
 
 const trim = (v) => {
@@ -35,6 +41,11 @@ const splitDate = (date, splitString = '-') => {
     day,
   };
 };
+const getRandomTime = () => {
+  const date = new Date()
+  const str = date.getFullYear() + '' + date.getMonth() + '' + date.getDay() + (Math.random() * 10000).toFixed(0)
+  return str
+}
 
 
 const REGEXP = /^1\d{10}$/;
@@ -50,6 +61,7 @@ const isIdCard = (value) => {
 
 module.exports = {
   formatTime,
+  getRandomTime,
   splitDate,
   formatDay,
   isMobilePhoneNumber,

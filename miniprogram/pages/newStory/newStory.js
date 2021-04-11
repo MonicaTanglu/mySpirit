@@ -13,8 +13,10 @@ Page({
       share: 1,
       detail: '',
       introduce: '',
-      chaptorNum: 1
+      chaptorNum: 1,
+      chaptorId: null
     },
+    // this.data.articleId = detail.articleId
     currentField: '',
   },
 
@@ -23,16 +25,26 @@ Page({
    */
   onLoad: function (options) {
     if (options.id) {
-      this.data.form.id = options.id
-      this.getDetail(options.id)
+      this.data.form.id = options.id // 文章id
+      this.data.form.chaptorId = options.chaptorId
+      if(options.chaptorId) this.getDetail(options)
+
+      if(options.title) {
+        // this.data.form.title = options.title
+        // this.data.form.chaptorNum = options.chaptorNum
+        this.setData({
+          'form.title': options.title,
+          'form.chaptorNum': options.chaptorNum
+        })
+      }
     }
   },
   async getDetail(id) {
     wx.cloud.callFunction({
       name: 'get',
       data: {
-        id: id,
-        action: 'articleDetail'
+        id: this.data.form.chaptorId,
+        action: 'storyDetail'
       },
       success: (res) => {
         let detail = res.result.data[0]
@@ -42,7 +54,6 @@ Page({
           'form.chaptorNum': detail.chaptorNum,
           'form.introduce': detail.introduce
         })
-        console.log(detail, this.data.form)
       }
     })
   },
@@ -67,7 +78,6 @@ Page({
     }
   },
   editorChange(e) {
-    console.log('editorChange', e)
     this.data.form.detail = e.detail.html
     this.data.form.introduce = util.trim(String(e.detail.text).substr(0, 24))
   },
@@ -88,7 +98,12 @@ Page({
           name: 'createArticle',
           data: this.data.form,
           success: res => {
-            this.showToast('修改成功')
+            if(this.data.form.chaptorId) {
+              this.showToast('修改成功')
+            } else {
+              this.showToast('新增成功')
+            }
+            
             wx.setStorageSync('articleUpdate', true)
             setTimeout(() => {
               wx.navigateBack({
@@ -97,7 +112,11 @@ Page({
             }, 500);
           },
           fail: err => {
-            this.showToast('修改失败')
+            if(this.data.form.chaptorId) {
+              this.showToast('修改失败')
+            } else {
+              this.showToast('新增失败')
+            }
           }
         })
       } else {
@@ -125,7 +144,7 @@ Page({
   showToast(info) {
     wx.showToast({
       title: info,
-      icon: null
+      icon: 'null'
     })
   }
 })

@@ -1,5 +1,5 @@
 <view class="container" style="height:{{editorHeight}}px;">
-  <editor id="editor" show-img-resize="{{true}}" show-img-size="{{true}}" bindblur="editorChange" class="ql-container"
+  <editor id="editor" show-img-resize="{{true}}" show-img-size="{{true}}" bindinput="editorChange" class="ql-container"
     placeholder="{{placeholder}}" bindstatuschange="onStatusChange" bindready="onEditorReady">
   </editor>
 </view>

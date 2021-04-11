@@ -29,7 +29,6 @@ Page({
     wx.getUserProfile({
       desc: '存储文章作者昵称，头像信息',
       success: (res) => {
-        console.log(res, 'getUserInfo')
         wx.setStorageSync('userInfo', res.userInfo)
         app.globalData.userInfo = res.userInfo
         this.setData({
@@ -37,7 +36,6 @@ Page({
         })
       },
       fail: (err) => {
-        console.log(err)
         wx.showToast({
           title: '获取信息失败',
           icon: null

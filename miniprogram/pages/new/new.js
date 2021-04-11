@@ -65,8 +65,7 @@ Page({
           'form.detail': detail.detail,
           'form.introduce': detail.introduce
         })
-        
-        console.log(detail, this.data.form)
+
       }
     })
   },
@@ -106,7 +105,6 @@ Page({
     })
   },
   editorChange(e) {
-    console.log('editorChange', e)
     this.data.form.detail = e.detail.html
     this.data.form.introduce = util.trim(String(e.detail.text).substr(0, 24))
   },
@@ -118,7 +116,7 @@ Page({
       this.showToast('请输入详细信息')
       return
     } else {
-      if(this.data.form.id) {
+      if (this.data.form.id) {
         // 编辑
         wx.cloud.callFunction({
           name: 'createArticle',

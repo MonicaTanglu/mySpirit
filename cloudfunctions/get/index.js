@@ -65,7 +65,7 @@ const getStoryList = async (event) => {
 // 获取章节列表
 
 const getChaptorList = async (event) => {
-  let res = await db.collection('chaptor').orderBy('chaptorNum', 'desc').where({
+  let res = await db.collection('chaptor').orderBy('chaptorNum', 'asc').where({
     articleId: event.articleId
   }).get()
   return res

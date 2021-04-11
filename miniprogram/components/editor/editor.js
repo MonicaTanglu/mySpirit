@@ -1,4 +1,6 @@
 // components/editor.js
+import util from '../../js/util.js'
+
 Component({
   /**
    * 组件的属性列表
@@ -8,7 +10,9 @@ Component({
       type: String,
       value: null,
       observer: function (newVal, oldVal) {
-        if(this.editorCtx) this.editorCtx.setContents({html: newVal})
+        if (this.editorCtx) this.editorCtx.setContents({
+          html: newVal
+        })
         else this.content = newVal
       }
     }
@@ -41,7 +45,6 @@ Component({
   methods: {
     onStatusChange(e) {
       const formats = e.detail
-      console.log(formats, 'format')
       this.setData({
         formats
       })
@@ -85,24 +88,37 @@ Component({
       wx.chooseImage({
         count: 1,
         success: function (res) {
-          that.editorCtx.insertImage({
-            src: res.tempFilePaths[0],
-            data: {
-              id: 'abcd',
-              role: 'god'
+          wx.cloud.uploadFile({
+            cloudPath: 'editorImage/' + util.getRandomTime() + ".png",
+            filePath: res.tempFilePaths[0],
+            success: async uploadRes => {
+              let fileListRes = await wx.cloud.getTempFileURL({
+                fileList: [uploadRes.fileID]
+              })
+              // console.lof(fileListRes)
+              // console.log(uploadRes.fileID)
+              that.editorCtx.insertImage({
+                src: fileListRes.fileList[0].tempFileURL,
+                width: '80%',
+                success: function (res) {
+                  console.log('insert image success', res)
+                }
+              })
             },
-            width: '80%',
-            success: function () {
-              console.log('insert image success')
+            fail: e => {
+              wx.showToast({
+                title: '上传失败',
+                icon: 'none'
+              })
             }
           })
+
         }
       })
     },
     onEditorReady() {
       const that = this
       this.createSelectorQuery().select('#editor').context(function (res) {
-        console.log(that.properties.detail, 'properties')
         that.editorCtx = res.context
         if (that.properties.detail) that.editorCtx.setContents({
           html: that.properties.detail

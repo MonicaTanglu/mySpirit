@@ -2,7 +2,7 @@
 
 Page({
 
- /**
+  /**
    * 页面的初始数据
    */
   data: {
@@ -12,14 +12,15 @@ Page({
     popShow: false,
     currentOpenid: '',
     commentContent: '',
-    commentList: []
+    commentList: [],
+    articleId: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: async function (options) {
-    this.data.chaptorId = options.id 
+    this.data.chaptorId = options.id
     const openid = wx.getStorageSync('openid')
     this.setData({
       openid: openid
@@ -39,6 +40,7 @@ Page({
     })
     let detail = result.data[0]
     this.data.id = detail._id
+    this.data.articleId = detail.articleId
     this.setData({
       detail
     })
@@ -130,7 +132,7 @@ Page({
   },
   edit() {
     wx.navigateTo({
-      url: '/pages/new/new?id=' + this.data.id,
+      url: '/pages/newStory/newStory?id=' + this.data.articleId + '&&chaptorId=' + this.data.chaptorId,
     })
   },
   deleteComment(e) {
@@ -144,10 +146,10 @@ Page({
             name: 'delete',
             data: {
               id: e.currentTarget.dataset.id,
+              
               action: 'deleteComment'
             },
             success: (res) => {
-              console.log('deleteComment', res)
               if (res.result.data) {
                 that.showToast('删除成功')
                 that.getCommentList()
@@ -160,6 +162,7 @@ Page({
 
   },
   delete() {
+    let that = this
     wx.showModal({
       title: '提示',
       content: '确定要删除吗？',
@@ -169,11 +172,18 @@ Page({
             name: 'delete',
             data: {
               action: 'deleteArticle',
-              id: this.data.id
+              chaptorId: that.data.chaptorId,
+              id: that.data.id
             },
             success: (res) => {
-              if (res.data) {
-                this.showToast('删除成功', 'success')
+              if (res.result.data) {
+                that.showToast('删除成功', 'success')
+                setTimeout(() => {
+                  wx.navigateBack({
+                    delta: 0,
+                  })
+                }, 500);
+                
               }
             }
           })

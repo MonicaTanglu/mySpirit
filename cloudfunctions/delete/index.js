@@ -9,6 +9,11 @@ const wxContext = cloud.getWXContext()
 
 const deleteArticleDetail = async (event) => {
   // 删除章节
+  if(event.chaptorId) {
+    let delChaptorRes =  await db.collection('chaptor').where({
+      _id: event.chaptorId
+    }).remove()
+  }
   // 删除文章
   let articleDeleteRes = await db.collection('article_detail').where({
     _id: event.id
@@ -17,7 +22,7 @@ const deleteArticleDetail = async (event) => {
   await db.collection('comment').where({
     articleId: event.id
   }).remove()
-  if(articleDeleteRes) return true
+  if(articleDeleteRes.stats.removed > 0) return true
   else return false
 }
 const deleteComment = async (event) => {

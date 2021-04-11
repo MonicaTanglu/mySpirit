@@ -12,3 +12,8 @@
   background: #3A96E7;
   color: #fff;
 }
+.delete-cell {
+  background: red;
+  text-align: center;
+  color: #fff;
+}

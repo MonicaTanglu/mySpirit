@@ -145,7 +145,6 @@ Page({
               action: 'deleteComment'
             },
             success: (res) => {
-              console.log('deleteComment', res)
               if (res.result.data) {
                 that.showToast('删除成功')
                 that.getCommentList()

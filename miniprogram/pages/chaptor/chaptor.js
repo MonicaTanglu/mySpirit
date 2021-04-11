@@ -7,18 +7,22 @@ Page({
   data: {
     title: '',
     list: [],
-    loading: true
+    loading: true,
+    id: null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let id = options.id
-    let title = options.title
+
     this.setData({
-      title
+      title: options.title,
+      id: options.id
     })
+    this.getChaptorList(options.id)
+  },
+  getChaptorList(id) {
     wx.cloud.callFunction({
       name: 'get',
       data: {
@@ -26,18 +30,16 @@ Page({
         articleId: id
       },
       success: (res) => {
-        console.log(res,'chaptorList')
         this.setData({
           loading: false,
           list: res.result.data
         })
       },
       fail: () => {
-        
+
       }
     })
   },
-
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
@@ -49,7 +51,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
+    if (this.data.id) this.getChaptorList(this.data.id)
   },
 
   /**
@@ -85,5 +87,10 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  goTo() {
+    wx.navigateTo({
+      url: '/pages/newStory/newStory?title=' + this.data.title + '&&chaptorNum=' + (this.data.list.length + 1) + "&&id=" + this.data.id,
+    })
   }
 })
