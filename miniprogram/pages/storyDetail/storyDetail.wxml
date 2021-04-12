@@ -49,7 +49,7 @@
   <!-- <rich-text nodes="{{detail.detail}}"></rich-text> -->
 </view>
 
-<van-popup show="{{ popShow }}" bind:close="onClose" position="bottom" custom-style="height: 70px">
+<van-popup show="{{ popShow }}" bind:close="onClose" position="bottom" custom-style="height: 112px">
   <view class="cell-block" bindtap="edit" bindtap="edit">编辑</view>
   <view class="cell-block" bindtap="delete" bindtap="delete">删除</view>
 </van-popup>

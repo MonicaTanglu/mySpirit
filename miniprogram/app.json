@@ -1,11 +1,11 @@
 {
   "pages": [
-    "pages/myStory/myStory",
+    
     "pages/index/index",
     "pages/movie/movie",
     "pages/new/new",
     "pages/detail/detail",
-    
+    "pages/myStory/myStory",
     "pages/mine/mine",
     "pages/aboutme/aboutme",
     "pages/storyDetail/storyDetail",
@@ -30,13 +30,13 @@
     "borderStyle": "black",
     "list": [{
       "pagePath": "pages/index/index",
-      "text": "文化世界"
+      "text": "文化"
     },{
       "pagePath": "pages/movie/movie",
-      "text": "电影世界"
+      "text": "电影"
     },{
       "pagePath": "pages/mine/mine",
-      "text": "个人世界"
+      "text": "我的"
     }]
   }
 }

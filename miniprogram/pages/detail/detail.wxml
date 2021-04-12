@@ -7,8 +7,9 @@
   <view class="h2">{{detail.title}}</view>
   <view class="time"><label>{{common.formatTime('yyyy-M-d hh:mm',detail.updateTime)}}</label></view>
   <view class="flex-name">
-    <view>
+    <view class="flex-user">
       <van-image round width="42px" height="42px" src="{{detail.avatarUrl}}"></van-image>
+      <text class="name">{{detail.nickName}}</text>
     </view>
     <label class="icon" bindtap="popHandle">
       <van-icon name="ellipsis" />
@@ -46,7 +47,7 @@
   <!-- <rich-text nodes="{{detail.detail}}"></rich-text> -->
 </view>
 
-<van-popup show="{{ popShow }}" bind:close="onClose" position="bottom" custom-style="height: 70px">
+<van-popup show="{{ popShow }}" bind:close="onClose" position="bottom" custom-style="height: 112px">
   <view class="cell-block" bindtap="edit" bindtap="edit">编辑</view>
   <view class="cell-block" bindtap="delete" bindtap="delete">删除</view>
 </van-popup>

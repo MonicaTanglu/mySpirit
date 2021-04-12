@@ -31,6 +31,7 @@ Page({
       success: (res) => {
         wx.setStorageSync('userInfo', res.userInfo)
         app.globalData.userInfo = res.userInfo
+        this.login()
         this.setData({
           userInfo: res.userInfo
         })
@@ -38,7 +39,7 @@ Page({
       fail: (err) => {
         wx.showToast({
           title: '获取信息失败',
-          icon: null
+          icon: 'null'
         })
       }
     })
@@ -105,5 +106,37 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  async login() {
+    let userObj = wx.getStorageSync('userInfo')
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {
+        avatarUrl: userObj ? userObj.avatarUrl : '',
+        nickName: userObj ? userObj.nickName : ''
+      },
+      success: res => {
+        app.globalData.openid = res.result.openid
+        wx.setStorageSync('openid', res.result.openid)
+        this.data.openid = res.result.openid
+        // this.getList()
+      }
+    })
+  },
+  goTo(e) {
+    let url = e.currentTarget.dataset.url
+    if (url) {
+      if (!this.data.userInfo.nickName) {
+        wx.showToast({
+          title: '请先登录！',
+          icon: 'none'
+        })
+      } else {
+        wx.navigateTo({
+          url: url,
+        })
+      }
+
+    }
   }
 })

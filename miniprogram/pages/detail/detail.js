@@ -110,7 +110,7 @@ Page({
           fail: () => {
             wx.showToast({
               title: '获取用户信息失败',
-              icon: null
+              icon: 'null'
             })
             resolve(false)
           }
@@ -157,26 +157,34 @@ Page({
 
   },
   delete() {
+    let that = this
     wx.showModal({
       title: '提示',
       content: '确定要删除吗？',
-      success(res) {
+      success: (res) => {
         if (res.confirm) {
           wx.cloud.callFunction({
             name: 'delete',
             data: {
               action: 'deleteArticle',
-              id: this.data.id
+              id: that.data.id
             },
             success: (res) => {
-              if (res.data) {
-                this.showToast('删除成功', 'success')
+              if (res.result.data) {
+                that.showToast('删除成功', 'success')
+                wx.setStorageSync('articleUpdate', true)
+                setTimeout(() => {
+                  wx.navigateBack({
+                    delta: 0,
+                  })
+                }, 500);
+
               }
             }
           })
         }
       }
-    })()
+    })
   },
   showToast(content, icon = "success") {
     wx.showToast({

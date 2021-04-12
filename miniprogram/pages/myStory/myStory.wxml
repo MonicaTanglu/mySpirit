@@ -10,12 +10,12 @@
     <block wx:for="{{list}}" wx:key="index" wx:for-index="index" wx:for-item="item">
       <van-swipe-cell id="swipe-cell" right-width="{{ 65 }}">
         <van-cell title="{{item.title}}" isLink url="/pages/chaptor/chaptor?id={{item._id}}&&title={{item.title}}" />
-        <view slot="right" class="delete-cell" bindtap="deleteArticle">删除</view>
+        <view slot="right" class="van-swipe-cell__right" bindtap="deleteArticle" data-id="{{item._id}}">删除</view>
       </van-swipe-cell>
     </block>
   </van-cell-group>
 
 </view>
-<cover-view class="plus-circle" bindtap="goTo">
+<view class="plus-circle" bindtap="goTo">
   <van-icon name="plus" color="#ffffff" size="30px" />
-</cover-view>
+</view>

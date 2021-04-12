@@ -114,7 +114,7 @@ Page({
           fail: () => {
             wx.showToast({
               title: '获取用户信息失败',
-              icon: null
+              icon: 'null'
             })
             resolve(false)
           }

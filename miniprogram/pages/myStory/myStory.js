@@ -95,6 +95,40 @@ Page({
   onShareAppMessage: function () {
 
   },
+  deleteArticle(e) {
+    let id = e.currentTarget.dataset.id
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除吗？',
+      success: (res) => {
+        wx.cloud.callFunction({
+          name: 'delete',
+          data: {
+            id: id,
+            action: 'deleteMyStory'
+          },
+          success: (res) => {
+            if (res.result.data) {
+              wx.showToast({
+                title: '删除成功',
+                icon: 'success'
+              })
+              this.data.list = []
+              setTimeout(() => {
+                this.getList()
+              }, 500);
+              
+            } else {
+              wx.showToast({
+                title: '删除失败',
+                icon: 'error'
+              })
+            }
+          }
+        })
+      }
+    })
+  },
   goTo() {
     wx.navigateTo({
       url: '/pages/newStory/newStory',

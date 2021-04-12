@@ -1,10 +1,11 @@
 <!--miniprogram/custom-tab-bar/index.wxml-->
-<cover-view class="tab-bar">
+<view class="tab-bar">
   <!-- <cover-view class="tab-bar-border"></cover-view> -->
-  <cover-view class="plus-circle" wx:if="{{selected === 0 || selected === 1}}" bindtap="goTo">
+  
+  <view wx:for="{{list}}" wx:key="index" class="tab-bar-item {{selected === index ? 'tab-bar-item-selected': ''}}" data-path="{{item.pagePath}}" data-index="{{index}}" bindtap="switchTab">
+    <view style="color: {{selected === index ? selectedColor : color}}">{{item.text}}</view>
+  </view>
+</view>
+<view class="plus-circle" wx:if="{{selected === 0 || selected === 1}}" bindtap="goTo">
     <van-icon name="plus" color="#ffffff" size="30px"/>
-  </cover-view>
-  <cover-view wx:for="{{list}}" wx:key="index" class="tab-bar-item {{selected === index ? 'tab-bar-item-selected': ''}}" data-path="{{item.pagePath}}" data-index="{{index}}" bindtap="switchTab">
-    <cover-view style="color: {{selected === index ? selectedColor : color}}">{{item.text}}</cover-view>
-  </cover-view>
-</cover-view>
+  </view>

@@ -16,7 +16,7 @@
       </block>
     </van-cell-group>
   </view>
-  <cover-view class="plus-circle" bindtap="goTo">
+  <view class="plus-circle" bindtap="goTo">
     <van-icon name="plus" color="#ffffff" size="30px" />
-  </cover-view>
+  </view>
 </view>

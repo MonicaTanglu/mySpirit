@@ -1,13 +1,17 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
 
-cloud.init()
-const db = cloud.database()
-const wxContext = cloud.getWXContext()
-const commentInsert = async (event) => {
+// 初始化 cloud
+cloud.init({
+  // API 调用都保持和云函数当前所在环境一致
+  env: cloud.DYNAMIC_CURRENT_ENV
+})
+const db = cloud.database({env: cloud.DYNAMIC_CURRENT_ENV})
+
+const commentInsert = async (event,openid) => {
   let params = {
     content: event.content,
-    openid: wxContext.OPENID,
+    openid: openid,
     articleId: event.articleId, // 详细文章详情
     commentTime: new Date()
   }
@@ -29,11 +33,11 @@ const commentInsert = async (event) => {
 }
 // 云函数入口函数
 exports.main = async (event, context) => {
-
+  const wxContext = cloud.getWXContext()
   let result = null
   switch (event.action) {
     case 'comment':
-      result = await commentInsert(event)
+      result = await commentInsert(event,wxContext.OPENID)
       break
     default:
       break

@@ -23,8 +23,8 @@ const wxContext = cloud.getWXContext()
     openid: wxContext.OPENID
   }).get()
   let params = {
-    avatarUrl: params.avatarUrl,
-    nickName: params.nickName,
+    avatarUrl: event.avatarUrl,
+    nickName: event.nickName,
     openid: wxContext.OPENID
   }
   if (user.data.length === 0) {
@@ -35,7 +35,7 @@ const wxContext = cloud.getWXContext()
   } else {
     // 假如存在该用户的时候，检查该用户的头像昵称是否变化 变化则修改
     let userObj = user.data[0]
-    if (userObj.nickName === event.nickName && userObj.avatarUrl === event.avatarUrl) continue
+    if (userObj.nickName === event.nickName && userObj.avatarUrl === event.avatarUrl) {}
     else {
       db.collection('user').where({
         openid: wxContext.OPENID

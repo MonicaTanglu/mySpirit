@@ -1,11 +1,15 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
 
-cloud.init()
-const db = cloud.database()
+// 初始化 cloud
+cloud.init({
+  // API 调用都保持和云函数当前所在环境一致
+  env: cloud.DYNAMIC_CURRENT_ENV
+})
+const db = cloud.database({env: cloud.DYNAMIC_CURRENT_ENV})
 const _ = db.command
 const $ = db.command.aggregate
-const wxContext = cloud.getWXContext()
+
 // 获取评论列表
 const getComment = async (event) => {
   const $ = db.command.aggregate
@@ -24,14 +28,14 @@ const getComment = async (event) => {
   return res
 }
 // 电影文化列表
-const getMovieList = async (event) => {
+const getMovieList = async (event,openid) => {
   let res = await db.collection('article').aggregate().match(_.or([{
     category: 2,
     share: 2
   }, {
     category: 2,
     share: 1,
-    openid: wxContext.OPENID
+    openid: openid
   }])).skip(event.startIndex).limit(event.pageSize).lookup({
     from: 'user',
     localField: 'openid',
@@ -45,11 +49,11 @@ const getMovieList = async (event) => {
   return res
 }
 // 个人故事列表
-const getStoryList = async (event) => {
+const getStoryList = async (event,openid) => {
   let res = await db.collection('article').aggregate().match({
     category: 3,
     share: 1,
-    openid: wxContext.OPENID
+    openid: openid
   }).skip(event.startIndex).limit(event.pageSize).lookup({
     from: 'user',
     localField: 'openid',
@@ -71,10 +75,10 @@ const getChaptorList = async (event) => {
   return res
 }
 // 获取故事详情
-const storyDetail = async (event) => {
+const storyDetail = async (event,openid) => {
   let res = await db.collection('article_detail').aggregate().match({
     chaptorId: event.id,
-    openid: wxContext.OPENID
+    openid: openid
   }).lookup({
     from: 'user',
     localField: 'openid',
@@ -108,7 +112,7 @@ const storyDetail = async (event) => {
 
 // 云函数入口函数
 exports.main = async (event, context) => {
-
+  const wxContext = cloud.getWXContext()
   let result = []
   const _ = db.command
   const $ = db.command.aggregate
@@ -156,10 +160,10 @@ exports.main = async (event, context) => {
       }).end()
       break
     case 'movieList':
-      result = await getMovieList(event)
+      result = await getMovieList(event,wxContext.OPENID)
       break
     case 'storyList':
-      result = await getStoryList(event)
+      result = await getStoryList(event,wxContext.OPENID)
       break
     case 'comment':
       result = await getComment(event)
@@ -169,7 +173,7 @@ exports.main = async (event, context) => {
       result['list'] = chaptorRes.data
       break
     case 'storyDetail':
-      result = await storyDetail(event)
+      result = await storyDetail(event,wxContext.OPENID)
       break
     default:
       break

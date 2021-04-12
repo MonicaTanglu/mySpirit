@@ -10,7 +10,7 @@ Page({
     pageNow: 1,
     pageSize: 20,
     list: [],
-    loading : true
+    loading: true
   },
 
   /**
@@ -23,24 +23,27 @@ Page({
       this.data.openid = openid
     }
     if (!this.data.openid) {
-      let userObj = wx.getStorageSync('userInfo')
-      wx.cloud.callFunction({
-        name: 'login',
-        data: {
-          avatarUrl: userObj ? userObj.avatarUrl : '',
-          nickName: userObj ? userObj.nickName : ''
-        },
-        success: res => {
-          app.globalData.openid = res.result.openid
-          wx.setStorageSync('openid', res.result.openid)
-          this.data.openid = res.result.openid
-          this.getList()
-        }
-      })
+      this.login()
     } else {
       app.globalData.openid = this.data.openid
       this.getList()
     }
+  },
+  async login() {
+    let userObj = wx.getStorageSync('userInfo')
+    wx.cloud.callFunction({
+      name: 'login',
+      data: {
+        avatarUrl: userObj ? userObj.avatarUrl : '',
+        nickName: userObj ? userObj.nickName : ''
+      },
+      success: res => {
+        app.globalData.openid = res.result.openid
+        wx.setStorageSync('openid', res.result.openid)
+        this.data.openid = res.result.openid
+        this.getList()
+      }
+    })
   },
   async getList() {
     let originList = this.data.list
@@ -79,7 +82,8 @@ Page({
   onShow: function () {
     this.setBarSelected()
     const path = wx.getStorageSync('articleUpdate')
-    if(path) {
+    // if(wx.getStorageSync('userInfo')) this.login()
+    if (path) {
       this.data.list = []
       this.getList()
       wx.removeStorageSync('articleUpdate')

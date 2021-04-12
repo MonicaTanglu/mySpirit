@@ -1,10 +1,16 @@
 // 云函数入口文件
 const cloud = require('wx-server-sdk')
 
-cloud.init()
-const db = cloud.database()
-const wxContext = cloud.getWXContext()
-const updateArticle = async (params) => {
+// 初始化 cloud
+cloud.init({
+  // API 调用都保持和云函数当前所在环境一致
+  env: cloud.DYNAMIC_CURRENT_ENV
+})
+const db = cloud.database({
+  env: cloud.DYNAMIC_CURRENT_ENV
+})
+
+const updateArticle = async (params, openid) => {
   let artcleParams = {
     category: params.category,
     title: params.title,
@@ -35,7 +41,7 @@ const updateArticle = async (params) => {
         title: params.title,
         updateTime: new Date(),
         detail: params.detail,
-        openid: wxContext.OPENID,
+        openid: openid,
         chaptorId: params.chaptorId ? params.chaptorId : null
       }
       detailRes = await db.collection('article_detail').where({
@@ -58,7 +64,7 @@ const updateArticle = async (params) => {
         detail: params.detail,
         chaptorId: chaptorRes ? chaptorRes._id : null,
         articleId: params.id,
-        openid: wxContext.OPENID
+        openid: openid
       }
       detailRes = await db.collection('article_detail').add({
         data: articleDetailParams
@@ -76,9 +82,9 @@ const updateArticle = async (params) => {
 exports.main = async (event, context) => {
   let params = event
   let success = false
-
+  const wxContext = cloud.getWXContext()
   if (params.id) { // 假如存在id则修改
-    success = await updateArticle(params)
+    success = await updateArticle(params, wxContext.OPENID)
   } else {
     let artcleParams = {
       category: event.category,
