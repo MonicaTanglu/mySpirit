@@ -42,6 +42,8 @@ Page({
     })
   },
   popHandle() {
+    let openid = wx.getStorageSync('openid')
+    if(openid !== this.data.detail.openid) return
     this.setData({
       popShow: true
     })

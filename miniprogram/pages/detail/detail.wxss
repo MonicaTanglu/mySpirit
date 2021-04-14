@@ -44,7 +44,7 @@
 
 .cell-block:first-child {
   border-bottom: 1px solid #EBEDF0;
-  height: 36px;
+  /* height: 36px; */
 }
 
 .cell-block:last-child {
@@ -98,4 +98,8 @@
   color: #8D8D8D;
   display: block;
   font-size: 12px;
+}
+.comment-user {
+  width: 100px;
+  text-align: center;
 }
