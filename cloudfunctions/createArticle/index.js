@@ -6,9 +6,7 @@ cloud.init({
   // API 调用都保持和云函数当前所在环境一致
   env: cloud.DYNAMIC_CURRENT_ENV
 })
-const db = cloud.database({
-  env: cloud.DYNAMIC_CURRENT_ENV
-})
+const db = cloud.database()
 
 const updateArticle = async (params, openid) => {
   let artcleParams = {
@@ -71,8 +69,19 @@ const updateArticle = async (params, openid) => {
       })
 
     }
-
-
+  } else {
+    let articleDetailParams = {
+      title: params.title,
+      updateTime: new Date(),
+      detail: params.detail,
+      openid: openid,
+      chaptorId: null
+    }
+    detailRes = await db.collection('article_detail').where({
+      articleId: params.id
+    }).update({
+      data: articleDetailParams
+    })
   }
 
   if (detailRes.stats.updated > 0 || detailRes._id) return true
